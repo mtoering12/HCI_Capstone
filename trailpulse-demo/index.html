@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TrailPulse Demo</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+  <header>
+    <h1>TrailPulse</h1>
+    <input type="text" placeholder="Search trails or vibes..." />
+  </header>
+
+  <main>
+    <div id="map"></div>
+    <aside>
+      <h2>Filters</h2>
+      <label><input type="checkbox" checked /> Peaceful</label>
+      <label><input type="checkbox" checked /> Risky</label>
+      <label><input type="checkbox" checked /> Mud</label>
+      <label><input type="checkbox" checked /> Wildlife</label>
+    </aside>
+  </main>
+
+  <div id="trail-modal" class="hidden">
+    <h3>Blue Ridge Trail</h3>
+    <p><strong>Weather:</strong> 65°F, partly cloudy</p>
+    <p><strong>Summary:</strong> Peaceful and scenic, with recent posts mentioning fall foliage and light crowds.</p>
+    <div class="hazard-timeline">
+      <div>🐻 Bear sighting - Sept 20</div>
+      <div>🌧️ Muddy trail - Sept 22</div>
+      <div>✅ Cleared - Sept 23</div>
+    </div>
+    <button onclick="closeModal()">Close</button>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

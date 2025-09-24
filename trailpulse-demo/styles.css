@@ -1,0 +1,57 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+header {
+  background: #2e3b4e;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+main {
+  display: flex;
+}
+
+#map {
+  height: 500px;
+  width: 75%;
+}
+
+aside {
+  width: 25%;
+  padding: 10px;
+  background: #f4f4f4;
+}
+
+#trail-modal {
+  position: fixed;
+  top: 20%;
+  left: 30%;
+  width: 40%;
+  background: white;
+  border: 2px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.hidden {
+  display: none;
+}
+
+.hazard-timeline {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  margin-top: 10px;
+}
+.hazard-event {
+  min-width: 100px;
+  padding: 10px;
+  background: #e3e3e3;
+  border-radius: 5px;
+  text-align: center;
+}
