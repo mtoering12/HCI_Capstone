@@ -7,21 +7,48 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
-  <header>
-    <h1>TrailPulse</h1>
-    <input type="text" placeholder="Search trails or vibes..." />
-  </header>
+  <div class="container">
+    <nav class="sidebar">
+      <h2>TrailPulse</h2>
+      <ul>
+        <li>Mood Summaries</li>
+        <li>What Hikers Are Saying</li>
+        <li>Top Three Feelings</li>
+        <li>Recent Pictures</li>
+      </ul>
+    </nav>
 
-  <main>
-    <div id="map"></div>
-    <aside>
-      <h2>Filters</h2>
-      <label><input type="checkbox" checked /> Peaceful</label>
-      <label><input type="checkbox" checked /> Risky</label>
-      <label><input type="checkbox" checked /> Quiet</label>
-      <label><input type="checkbox" checked /> Epic</label>
-    </aside>
-  </main>
+    <div class="dashboard">
+      <div id="map"></div>
+
+      <section class="trail-info">
+        <div class="filters">
+          <button class="filter active">Peaceful</button>
+          <button class="filter">Scenic</button>
+          <button class="filter">Exhilarating</button>
+          <button class="filter">Thrilling</button>
+        </div>
+
+        <div class="trail-card">
+          <h3>Cascades Falls Trail</h3>
+          <p><strong>Type:</strong> Out-and-back</p>
+          <p><strong>Distance:</strong> 6.0 km</p>
+          <p><strong>Elevation:</strong> 170 m</p>
+          <p><strong>Difficulty:</strong> Moderate</p>
+          <p><strong>Tags:</strong> Popular, Scenic</p>
+        </div>
+
+        <div class="trail-card">
+          <h3>McAfee Knob Trail</h3>
+          <p><strong>Type:</strong> Out-and-back</p>
+          <p><strong>Distance:</strong> 13.0 km</p>
+          <p><strong>Elevation:</strong> 170 m</p>
+          <p><strong>Difficulty:</strong> High</p>
+          <p><strong>Tags:</strong> Popular, Thrilling</p>
+        </div>
+      </section>
+    </div>
+  </div>
 
   <div id="trail-modal" class="hidden">
     <h3>Blue Ridge Trail</h3>
