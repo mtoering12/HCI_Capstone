@@ -20,14 +20,19 @@ body {
   font-size: 24px;
 }
 
-.sidebar ul {
+.sidebar-menu {
   list-style: none;
   padding: 0;
 }
 
-.sidebar li {
+.sidebar-menu li {
   margin: 20px 0;
-  cursor: pointer;
+}
+
+.sidebar-menu li span {
+  color: white;
+  font-size: 16px;
+  cursor: default;
 }
 
 .content {
