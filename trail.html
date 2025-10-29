@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Trail Details</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="trail-page" style="padding: 40px;">
+    <h1 id="trailTitle">Trail Name</h1>
+    <p>This page will eventually show full trail details, mood summaries, and recent posts.</p>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get('name');
+    document.getElementById('trailTitle').textContent = name || 'Trail Details';
+  </script>
+</body>
+</html>
