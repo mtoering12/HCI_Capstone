@@ -6,16 +6,47 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from sklearn.metrics.pairwise import cosine_similarity
 
-load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+from supabase import create_client
+from supabase.client import ClientOptions
 
-# File paths
+load_dotenv()
+url = os.environ.get('SUPABASE_URL')
+key = os.environ.get('SUPABASE_KEY')
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY_2"))
+
+'''# File paths
 JSON_FILE = "facebook_dataset_draft.json"
 EMBED_FILE = "trail_post_embeddings.npy"
 REF_FILE = "gpt_reflected_v5.csv"
 
 # 1. Load raw JSON
 df = pd.read_json(JSON_FILE)
+'''
+EMBED_FILE = "trail_post_embeddings.npy"
+REF_FILE = "gpt_reflected_v5.csv"
+# -------- ESTABLISH DATABASE CONNECTION / RETRIEVE DATA ---------
+supabase = create_client(
+    url,
+    key,
+    options=ClientOptions(
+        postgrest_client_timeout=10,
+        storage_client_timeout=10,
+        schema="public",
+    )
+)
+
+#data = supabase.table("Facebook").select("text").execute()
+data = supabase.table("Facebook").select("text, facebookUrl, time").execute()
+'''
+for data_obj in data.data:
+    custom_string = f"{data_obj['raw']}"
+    print(custom_string)
+'''
+
+supabase.auth.sign_out()
+# --------- FINISH DATA RETRIEVAL ---------
+
+df = pd.DataFrame(data.data)
 
 # 2. Add season column
 def infer_season(date_str):
@@ -88,5 +119,5 @@ def get_post_by_index(idx):
     return None
 
 # Done
-print(f"✅ Loaded {len(df)} posts from {JSON_FILE} with season tags added.")
+#print(f"✅ Loaded {len(df)} posts from {JSON_FILE} with season tags added.")
 print(df["season"].value_counts())
