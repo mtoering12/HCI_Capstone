@@ -36,7 +36,7 @@ supabase = create_client(
 )
 
 #data = supabase.table("Facebook").select("text").execute()
-data = supabase.table("Facebook").select("text, facebookUrl, time").execute()
+data = supabase.table("supa_fb_data").select("text, facebookUrl, time").execute()
 '''
 for data_obj in data.data:
     custom_string = f"{data_obj['raw']}"
