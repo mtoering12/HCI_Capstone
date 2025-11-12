@@ -1,14 +1,39 @@
 from flask import Flask, request, jsonify, render_template
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 from openai import OpenAI
+from supabase import create_client, Client
 from database import search_similar_posts
 import os
 from dotenv import load_dotenv
 
 # Load OpenAI key
 load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY_2"))
+
+supabase: Client = create_client(
+    os.getenv("SUPABASE_URL"), 
+    os.getenv("SUPABASE_KEY")
+)
+
+db = SQLAlchemy()
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:HCICapstoneProject1234@db.ksrmbbmdoqiybuqshrre.supabase.co:5432/postgres"
+
+db.init_app(app)
+
+# Creating database table if not already created
+class SupaFbData(db.Model):
+    uuid = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String, unique=False, nullable=True)
+    facebookUrl = db.Column(db.String, unique=False, nullable=True)
+    id = db.Column(db.String, unique=False, nullable=True)
+    time = db.Column(db.DateTime, unique=False, nullable=True)
+with app.app_context():
+    db.create_all()
+
+    
 
 # ----------------------------
 # Fill-in templates for frontend
@@ -23,6 +48,35 @@ FILL_IN_TEMPLATES = [
 # ----------------------------
 # Routes
 # ----------------------------
+
+# GET request for ALL posts
+@app.route("/db", methods=["GET"])
+def get_posts():
+    response = supabase.table("supa_fb_data").select("*").execute()
+
+    return jsonify(response.data)
+
+# GET request for single post, by UUID
+@app.route("/db/uuid", methods=["GET"])
+def get_post():
+    post_uuid = request.args.get('uuid')
+
+    response = supabase.table("supa_fb_data").select("*").eq("uuid", post_uuid).execute()
+
+    return jsonify(response.data)
+
+# POST request for insertion into database
+@app.route("/db", methods=["POST"])
+def push_post():
+    data = request.get_json()
+
+    response = supabase.table("supa_fb_data").insert(
+        {"text": data.get("text"), 
+         "facebookUrl": None, 
+         "id": None, 
+         "time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")}).execute()
+
+    return jsonify(response.data)
 
 @app.route("/")
 def home():
@@ -99,5 +153,5 @@ Answer clearly and factually using the context above. If you see emotional or so
 # ----------------------------
 # Run server
 # ----------------------------
-if __name__ == "__main__":
-    app.run(debug=True)
+#if __name__ == "__main__":
+#    app.run(debug=True)
