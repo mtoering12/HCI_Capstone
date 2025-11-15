@@ -1,5 +1,5 @@
-To Run App:
-  py -m venv venv
-  venv/Scripts/Activate (Windows)
-  pip install -r requirements.txt
-  flask --app server run
+To Run App: </br>
+py -m venv venv </br>
+venv/Scripts/Activate (Windows) </br>
+pip install -r requirements.txt </br>
+flask --app server run </br>
