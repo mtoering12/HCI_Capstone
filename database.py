@@ -9,6 +9,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from supabase import create_client
 from supabase.client import ClientOptions
 
+from transformers import pipeline
+
 load_dotenv()
 url = os.environ.get('SUPABASE_URL')
 key = os.environ.get('SUPABASE_KEY')
@@ -63,6 +65,64 @@ def infer_season(date_str):
     return "unknown"
 
 df["season"] = df["time"].apply(infer_season)
+
+# 3. Emotion Determination
+def get_emotions():
+    classifier = pipeline(
+    "text-classification",
+    model="j-hartmann/emotion-english-distilroberta-base",
+    top_k=None)
+
+    def get_top_emotion(text):
+        """
+        Detect the single dominant emotion and its score.
+        Returns:
+            emotion (str): the top emotion label
+            score (float): the confidence score (0–1)
+        """
+        try:
+            results = classifier(text[:512])[0]
+            # Get the highest score
+            top = max(results, key=lambda r: r["score"])
+            return pd.Series([top["label"].lower(), round(top["score"], 4)])
+        except Exception:
+            return pd.Series(["error", 0.0])
+
+    df["text"].apply(get_top_emotion)
+    # Apply to all posts
+    df[["dominant_emotion", "emotion_score"]] = df["text"].apply(get_top_emotion)
+
+    # Trail vibe keywords
+    trail_keywords = {
+    "chill": ["relaxing", "easy", "calm", "peaceful", "simple", "casual"],
+    "social": ["group", "friends", "people", "together", "meetup", "funny"],
+    "fun": ["enjoyable", "exciting", "awesome", "great", "adventure", "cool"],
+    "challenging": ["steep", "hard", "tough", "long", "climb", "intense"],
+    "scenic": ["view", "beautiful", "scenery", "mountain", "lake", "waterfall"],
+    "wildlife": ["animals", "birds", "deer", "bear", "squirrel", "nature"]
+    }
+
+    def tag_trail_keywords(text):
+        #"""Return tags like 'chill', 'fun', 'scenic', etc. based on keywords in post."""
+        #text_lower = text.lower()
+        matched_tags = []
+
+        for tag, keywords in trail_keywords.items():
+            if text == None:
+                matched_tags.append("general")
+            elif any(word in text.lower() for word in keywords):
+                matched_tags.append(tag)
+
+        if not matched_tags:
+            matched_tags.append("general")
+        return ", ".join(matched_tags)
+
+    df["trail_tags"] = df["text"].apply(tag_trail_keywords)
+
+    # Print counts
+    emotion_counts = df["dominant_emotion"].value_counts()
+    print("Emotion counts:")
+    print(emotion_counts)
 
 # 3. Optionally load reflections if they exist
 if os.path.exists(REF_FILE):

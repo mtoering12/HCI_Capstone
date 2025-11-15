@@ -4,6 +4,7 @@ from datetime import datetime
 from openai import OpenAI
 from supabase import create_client, Client
 from database import search_similar_posts
+from database import get_emotions
 import os
 from dotenv import load_dotenv
 
@@ -33,8 +34,6 @@ class SupaFbData(db.Model):
 with app.app_context():
     db.create_all()
 
-    
-
 # ----------------------------
 # Fill-in templates for frontend
 # ----------------------------
@@ -56,6 +55,7 @@ def get_trail_file():
 
 @app.route("/other.html", methods=["GET"])
 def get_mood_summaries_file():
+    get_emotions()
     return render_template("other.html")
 
 @app.route("/feelings.html", methods=["GET"])
