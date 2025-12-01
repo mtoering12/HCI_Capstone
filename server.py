@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 # Load OpenAI key
 load_dotenv()
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY_2"))
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 supabase: Client = create_client(
     os.getenv("SUPABASE_URL"), 
